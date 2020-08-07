@@ -47,7 +47,7 @@ const Home = () => {
       <Map
         center={position}
         zoom={7}
-        style={{ height: 500 }}
+        style={{ height: "100%" }}
         // onzoomend={onViewChange}
         onmoveend={onViewChange}
         ref={mapRef}
