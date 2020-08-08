@@ -1,30 +1,13 @@
 import React from "react";
-import { Marker, Popup } from "react-leaflet";
+import { Marker } from "react-leaflet";
 
-const PlaneMarker = ({ plane }) => {
-  const [
-    ,
-    callsing,
-    origin,
-    ,
-    ,
-    lon,
-    lat,
-    baro,
-    onGround,
-    velocity,
-    track,
-    verticalRate,
-    ,
-    ,
-    ,
-    ,
-    ,
-  ] = plane;
+const PlaneMarker = ({ plane, setSelectedPlane }) => {
+  const lon = plane[5];
+  const lat = plane[6];
 
   return (
-    <Marker position={[lat, lon]}>
-      <Popup>
+    <Marker position={[lat, lon]} onclick={() => setSelectedPlane(plane)}>
+      {/* <Popup>
         <ul>
           {callsing && callsing.length > 0 && (
             <li>
@@ -66,7 +49,7 @@ const PlaneMarker = ({ plane }) => {
             <b>{onGround ? "On ground" : "In air"}</b>
           </li>
         </ul>
-      </Popup>
+      </Popup> */}
     </Marker>
   );
 };

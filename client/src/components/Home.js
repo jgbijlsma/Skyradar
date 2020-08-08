@@ -2,14 +2,18 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Map, TileLayer } from "react-leaflet";
 import axios from "axios";
 import PlaneMarker from "./PlaneMarker";
+import PlaneInfoPanel from "./PlaneInfoPanel";
 
 const Home = () => {
   const position = [51.505, -0.09];
   const mapRef = useRef(null);
-  const [planes, setPlanes] = useState([]);
   let viewChangeCancel = useRef(null);
 
-  const onViewChange = useCallback(async () => {
+  const [planes, setPlanes] = useState([]);
+  const [updateInterval, setUpdateInterval] = useState();
+  const [selectedPlane, setSelectedPlane] = useState(null);
+
+  const updatePlanes = useCallback(async () => {
     try {
       if (viewChangeCancel.current) {
         viewChangeCancel.current();
@@ -31,13 +35,27 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    onViewChange();
-  }, [onViewChange]);
+    updatePlanes();
+
+    const i = setInterval(updatePlanes, 10000);
+    setUpdateInterval(i);
+  }, [updatePlanes]);
+
+  useEffect(() => {
+    return () => clearInterval(updateInterval);
+  }, [updateInterval]);
 
   const renderPlanes = () => {
+    let num = 0;
     return planes.map((plane, i) => {
+      num++;
+      if (num > 500) return null;
       return plane[5] && plane[6] ? (
-        <PlaneMarker key={i} plane={plane}></PlaneMarker>
+        <PlaneMarker
+          key={i}
+          plane={plane}
+          setSelectedPlane={setSelectedPlane}
+        ></PlaneMarker>
       ) : null;
     });
   };
@@ -49,15 +67,22 @@ const Home = () => {
         zoom={7}
         style={{ height: "100%" }}
         // onzoomend={onViewChange}
-        onmoveend={onViewChange}
+        onmoveend={updatePlanes}
+        minZoom={3}
         ref={mapRef}
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        {renderPlanes()}
+        {planes && renderPlanes()}
       </Map>
+      {selectedPlane && (
+        <PlaneInfoPanel
+          plane={selectedPlane}
+          setSelectedPlane={setSelectedPlane}
+        />
+      )}
     </>
   );
 };

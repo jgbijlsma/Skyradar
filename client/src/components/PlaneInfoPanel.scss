@@ -1,0 +1,52 @@
+@import "../variables.scss";
+
+.info-panel {
+  border-left: 4px solid black;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 300px;
+  background: $backgroundColor;
+  color: $textColor;
+  z-index: 5000;
+
+  .close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: 50%;
+    background: $primary;
+    color: $black;
+  }
+
+  .callsign {
+    padding: 1rem 0.5rem 0.5rem 0.5rem;
+    color: $primary;
+    text-decoration: underline;
+  }
+
+  .last-update {
+    padding: 0.5rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  table {
+    margin-top: 2rem;
+    color: $textColor;
+
+    tr {
+      padding: 0.3rem;
+      display: block;
+      border-bottom: 1px solid $separatorColor;
+    }
+
+    th {
+      width: 120px;
+      text-align: left;
+      vertical-align: top;
+    }
+  }
+}
